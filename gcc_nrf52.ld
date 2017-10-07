@@ -18,7 +18,7 @@ SECTIONS
     KEEP(*(.svc_data))
     PROVIDE(__stop_svc_data = .);
   } > RAM
-  
+
   .fs_data :
   {
     PROVIDE(__start_fs_data = .);
@@ -47,15 +47,15 @@ SECTIONS
     KEEP(*(SORT(.pwr_mgmt_data*)))
     PROVIDE(__stop_pwr_mgmt_data = .);
   } > FLASH
-  
+
   .log_const_data :
   {
     PROVIDE(__start_log_const_data = .);
     KEEP(*(.log_const_data))
     PROVIDE(__stop_log_const_data = .);
   } > FLASH
-  
-  
+
+
   .cli_command :
   {
     PROVIDE(__start_cli_command = .);
