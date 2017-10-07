@@ -29,8 +29,8 @@ int main(void)
     printf("App up and running.\n\r");
 
     while (true) {
-        if (buttons_is_top_pressed()) {
-            for (int i = 0; i < 1000 && !buttons_is_bottom_pressed(); ++i) {
+        // if (buttons_is_top_pressed()) {
+            // for (int i = 0; i < 1000 && !buttons_is_bottom_pressed(); ++i) {
                 hall_set_sleep(HALL_1, false);
                 hall_set_sleep(HALL_3, false);
 
@@ -40,11 +40,11 @@ int main(void)
                 printf("H1: %d H3: %d BAT: %.3fV\n\r", (int)hall1, (int)hall3, voltage);
 
                 nrf_delay_ms(100);
-            }
-        }
+            // }
+        // }
 
-        if (buttons_is_bottom_pressed()) {
-            for (int i = 0; i < 5 && !buttons_is_top_pressed(); ++i) {
+        // if (buttons_is_bottom_pressed()) {
+            // for (int i = 0; i < 5 && !buttons_is_top_pressed(); ++i) {
                 int delay = 50;
                 leds_set_all(LED_BAT_BOTTOM_R); nrf_delay_ms(delay);
                 leds_set_all(LED_BAT_BOTTOM_Y1); nrf_delay_ms(delay);
@@ -74,7 +74,7 @@ int main(void)
                 leds_set_all(LED_SEG_9); nrf_delay_ms(delay * 3);
                 leds_set_all(LED_SEG_DOT_TOP); nrf_delay_ms(delay);
                 leds_set_all(LED_NONE); nrf_delay_ms(delay);
-            }
-        }
+            // }
+        // }
     }
 }
