@@ -7,6 +7,7 @@
 #include <nrf_log.h>
 
 
+namespace lib {
 namespace {
 
 const nrf_drv_twi_t g_twiInst = {
@@ -68,3 +69,5 @@ bool Twi::write_no_stop(uint8_t address, const uint8_t* buffer, uint8_t size)
 
     return err == NRF_SUCCESS;
 }
+
+} // namespace lib

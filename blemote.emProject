@@ -121,23 +121,21 @@
         <file file_name="../components/boards/boards.c" />
       </folder>
     </folder>
-    <folder Name="hal">
-      <file file_name="hal/Twi.cc" />
-      <file file_name="hal/Twi.hh" />
-    </folder>
     <folder Name="config">
       <file file_name="config/app_config.h" />
       <file file_name="config/pins.h" />
       <file file_name="config/sdk_config.h" />
     </folder>
-    <file file_name="LedController.cc" />
-    <file file_name="LedController.hh" />
     <file file_name="main.cc" />
     <folder Name="lib">
       <file file_name="lib/time.hh" />
       <file file_name="lib/time.cc" />
       <file file_name="lib/ratio.hh" />
+      <file file_name="lib/twi.cc" />
+      <file file_name="lib/twi.hh" />
     </folder>
+    <file file_name="leds.cc" />
+    <file file_name="leds.hh" />
   </project>
   <configuration Name="Internal" hidden="Yes" />
   <configuration

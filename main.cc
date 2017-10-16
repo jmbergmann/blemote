@@ -81,6 +81,8 @@
 
 #include "lib/time.hh"
 
+#include "leds.hh"
+
 
 #define APP_FEATURE_NOT_SUPPORTED       BLE_GATT_STATUS_ATTERR_APP_BEGIN + 2    /**< Reply when unsupported features are requested. */
 
@@ -117,7 +119,6 @@ NRF_BLE_GATT_DEF(m_gatt);                                                       
 BLE_ADVERTISING_DEF(m_advertising);                                             /**< Advertising module instance. */
 
 static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;                        /**< Handle of the current connection. */
-APP_TIMER_DEF(m_led_timer_id);
 
 /* YOUR_JOB: Declare all services structure your application is using
  *  BLE_XYZ_DEF(m_xyz);
@@ -248,16 +249,6 @@ static void pm_evt_handler(pm_evt_t const * p_evt)
         default:
             break;
     }
-}
-
-static void led_timer_timeout_handler(void* context)
-{
-    NRF_LOG_INFO("LED timer timout handler.");
-}
-
-static void led_timer_timeout_handler2(int* context)
-{
-    NRF_LOG_INFO("LED timer timout handler.");
 }
 
 /**@brief Function for the Timer initialization.
@@ -447,9 +438,6 @@ static void application_timers_start(void)
        ret_code_t err_code;
        err_code = app_timer_start(m_app_timer_id, TIMER_INTERVAL, NULL);
        APP_ERROR_CHECK(err_code); */
-    ret_code_t err_code;
-    err_code = app_timer_start(m_led_timer_id, 5000, NULL);
-    APP_ERROR_CHECK(err_code);
 }
 
 
@@ -808,8 +796,17 @@ int main(void)
     log_init();
 //    timers_init();
     Clock clock;
-    Metronome timer(clock, 1500_ms, led_timer_timeout_handler);
-    timer.start();
+    Twi twi;
+    LedController leds(clock, twi);
+    BoardBatteryGauge bbg(leds);
+    RemoteBatteryGauge rbg(leds);
+    FunctionDisplay fd(leds);
+//    bbg.set_pattern(BatteryGauge::FLASHING);
+//    rbg.set_pattern(BatteryGauge::SEARCHING);
+//    fd.set_character(FunctionDisplay::CHAR_E);
+//    fd.set_character_flash_pattern(FunctionDisplay::FLASH_FAST);
+//    fd.set_character_flash_pattern(FunctionDisplay::FLASH_SOLID);
+
     buttons_leds_init(&erase_bonds);
     ble_stack_init();
     gap_params_init();

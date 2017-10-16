@@ -3,6 +3,8 @@
 #include <stdint.h>
 
 
+namespace lib {
+
 class Twi final
 {
 public:
@@ -13,3 +15,5 @@ public:
     bool write(uint8_t address, const uint8_t* buffer, uint8_t size);
     bool write_no_stop(uint8_t address, const uint8_t* buffer, uint8_t size);
 };
+
+} // namespace lib
