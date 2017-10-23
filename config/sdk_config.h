@@ -1305,7 +1305,7 @@
 // <e> SAADC_ENABLED - nrf_drv_saadc - SAADC peripheral driver
 //==========================================================
 #ifndef SAADC_ENABLED
-#define SAADC_ENABLED 0
+#define SAADC_ENABLED 1
 #endif
 // <o> SAADC_CONFIG_RESOLUTION  - Resolution
  
@@ -1315,7 +1315,7 @@
 // <3=> 14 bit 
 
 #ifndef SAADC_CONFIG_RESOLUTION
-#define SAADC_CONFIG_RESOLUTION 1
+#define SAADC_CONFIG_RESOLUTION 2
 #endif
 
 // <o> SAADC_CONFIG_OVERSAMPLE  - Sample period
@@ -1776,7 +1776,7 @@
  
 
 #ifndef TWI_DEFAULT_CONFIG_CLR_BUS_INIT
-#define TWI_DEFAULT_CONFIG_CLR_BUS_INIT 0
+#define TWI_DEFAULT_CONFIG_CLR_BUS_INIT 1
 #endif
 
 // <q> TWI_DEFAULT_CONFIG_HOLD_BUS_UNINIT  - Enables bus holding after uninit
@@ -2043,7 +2043,7 @@
  
 
 #ifndef APP_SCHEDULER_WITH_PAUSE
-#define APP_SCHEDULER_WITH_PAUSE 0
+#define APP_SCHEDULER_WITH_PAUSE 1
 #endif
 
 // <q> APP_SCHEDULER_WITH_PROFILER  - Enabling scheduler profiling
@@ -2097,14 +2097,14 @@
 // <i> will fail.
 
 #ifndef APP_TIMER_CONFIG_OP_QUEUE_SIZE
-#define APP_TIMER_CONFIG_OP_QUEUE_SIZE 10
+#define APP_TIMER_CONFIG_OP_QUEUE_SIZE 20
 #endif
 
 // <q> APP_TIMER_CONFIG_USE_SCHEDULER  - Enable scheduling app_timer events to app_scheduler
  
 
 #ifndef APP_TIMER_CONFIG_USE_SCHEDULER
-#define APP_TIMER_CONFIG_USE_SCHEDULER 0
+#define APP_TIMER_CONFIG_USE_SCHEDULER 1
 #endif
 
 // <q> APP_TIMER_WITH_PROFILER  - Enable app_timer profiling
@@ -2854,7 +2854,7 @@
  
 
 #ifndef NRF_PWR_MGMT_CONFIG_USE_SCHEDULER
-#define NRF_PWR_MGMT_CONFIG_USE_SCHEDULER 0
+#define NRF_PWR_MGMT_CONFIG_USE_SCHEDULER 1
 #endif
 
 // <o> NRF_PWR_MGMT_CONFIG_HANDLER_PRIORITY_COUNT - The number of priorities for module handlers. 
@@ -2993,7 +2993,7 @@
 // <e> NRF_LOG_BACKEND_UART_ENABLED - nrf_log_backend_uart - Log UART backend
 //==========================================================
 #ifndef NRF_LOG_BACKEND_UART_ENABLED
-#define NRF_LOG_BACKEND_UART_ENABLED 1
+#define NRF_LOG_BACKEND_UART_ENABLED 0
 #endif
 // <o> NRF_LOG_BACKEND_UART_TX_PIN - UART TX pin 
 #ifndef NRF_LOG_BACKEND_UART_TX_PIN

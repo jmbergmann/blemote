@@ -9,13 +9,16 @@
 #define PIN_SDA 14
 
 // Hall Sensors
-#define PIN_H1_OUT 04
+#define H1_FITTED true
+#define PIN_H1_AIN NRF_SAADC_INPUT_AIN0
 #define PIN_H1_SLP 31
 
-#define PIN_H2_OUT 03
+#define H2_FITTED false
+#define PIN_H2_AIN NRF_SAADC_INPUT_AIN1
 #define PIN_H2_SLP 00
 
-#define PIN_H3_OUT 02
+#define H3_FITTED true
+#define PIN_H3_AIN NRF_SAADC_INPUT_AIN2
 #define PIN_H3_SLP 30
 
 // LC709203 (Gas Gauge)

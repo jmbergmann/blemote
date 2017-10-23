@@ -29,9 +29,8 @@ using namespace lib::literals;
 #define CHECKED(x) if ((x) == false) { return false; }
 
 
-LedController::LedController(lib::Clock& clock, lib::Twi& twi)
-: m_clock(clock)
-, m_twi(twi)
+LedController::LedController(lib::Twi& twi)
+: m_twi(twi)
 {
     set_all(LED_NONE);
 }
@@ -113,9 +112,98 @@ void LedController::update()
     write_lsx_registers(U2_ADDRESS, u2Ls);
 }
 
+Led::Led(LedController& controller, LedController::led_t led)
+: m_controller(controller)
+, m_metronome(100_ms, [](void* self) { static_cast<decltype(this)>(self)->on_tick(); }, this)
+, m_led(led)
+{
+    set_pattern(OFF);
+}
+
+void Led::set_pattern(pattern_t pattern)
+{
+    if (m_pattern == pattern) {
+        return;
+    }
+
+    m_pattern = pattern;
+    m_step = 0;
+
+    switch (pattern) {
+    case OFF:
+    case SOLID:
+        m_metronome.stop();
+        break;
+
+    default:
+        m_metronome.start();
+        break;
+    }
+
+    update_led();
+}
+
+void Led::update_led()
+{
+    switch (m_pattern) {
+    case OFF:
+        m_controller.switch_off(m_led);
+        break;
+
+    case SOLID:
+        m_controller.switch_on(m_led);
+        break;
+        
+    case FLASH_FAST:
+        if (m_step % 2) {
+            m_controller.switch_on(m_led);
+        }
+        else {
+            m_controller.switch_off(m_led);
+        }
+        break;
+
+    case FLASH_SLOW:
+        if ((m_step % 8) < 4) {
+            m_controller.switch_on(m_led);
+        }
+        else {
+            m_controller.switch_off(m_led);
+        }
+        break;
+    }
+
+    ++m_step;
+}
+
+void Led::on_tick()
+{
+    update_led();
+}
+
+TopDotLed::TopDotLed(LedController& controller)
+: Led(controller, LedController::LED_SEG_DOT_TOP)
+{
+}
+
+BottomDotLed::BottomDotLed(LedController& controller)
+: Led(controller, LedController::LED_SEG_DOT_BOTTOM)
+{
+}
+
+UsbGreenLed::UsbGreenLed(LedController& controller)
+: Led(controller, LedController::LED_USB_G)
+{
+}
+
+UsbYellowLed::UsbYellowLed(LedController& controller)
+: Led(controller, LedController::LED_USB_Y)
+{
+}
+
 BatteryGauge::BatteryGauge(LedController& controller, int shiftVal)
 : m_controller(controller)
-, m_metronome(controller.clock(), 100_ms, [](void* self) { static_cast<BatteryGauge*>(self)->on_tick(); }, this)
+, m_metronome(100_ms, [](void* self) { static_cast<decltype(this)>(self)->on_tick(); }, this)
 , m_shiftVal(shiftVal)
 {
     set_pattern(OFF);
@@ -123,6 +211,10 @@ BatteryGauge::BatteryGauge(LedController& controller, int shiftVal)
 
 void BatteryGauge::set_pattern(pattern_t pattern)
 {
+    if (m_pattern == pattern) {
+        return;
+    }
+
     m_pattern = pattern;
     m_step = 0;
 
@@ -134,9 +226,11 @@ void BatteryGauge::set_pattern(pattern_t pattern)
     case SOC_40:
     case SOC_20:
         m_metronome.stop();
+        break;
 
     default:
         m_metronome.start();
+        break;
     }
 
     update_leds();
@@ -275,7 +369,7 @@ void BatteryGauge::on_tick()
 
 FunctionDisplay::FunctionDisplay(LedController& controller)
 : m_controller(controller)
-, m_metronome(controller.clock(), 100_ms, [](void* self) { static_cast<FunctionDisplay*>(self)->on_tick(); }, this)
+, m_metronome(100_ms, [](void* self) { static_cast<decltype(this)>(self)->on_tick(); }, this)
 {
     set_character(CHAR_NONE);
     set_character_flash_pattern(FLASH_SOLID);
@@ -283,6 +377,10 @@ FunctionDisplay::FunctionDisplay(LedController& controller)
 
 void FunctionDisplay::set_character(character_t character)
 {
+    if (m_character == character) {
+        return;
+    }
+
     m_character = character;
     m_step = 0;
 
@@ -290,7 +388,11 @@ void FunctionDisplay::set_character(character_t character)
 }
 
 void FunctionDisplay::set_character_flash_pattern(flash_pattern_t pattern)
-{
+{    
+    if (m_characterFlashPattern == pattern) {
+        return;
+    }
+
     m_characterFlashPattern = pattern;
     m_step = 0;
 

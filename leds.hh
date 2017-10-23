@@ -12,7 +12,7 @@ class LedController final
 public:
     typedef uint32_t led_states_t;
 
-    enum {
+    enum led_t {
         LED_NONE             = 0,
 
         LED_USB_G            = (1<<0),
@@ -41,13 +41,8 @@ public:
         LED_SEG_BOTTOM_RIGHT = (1<<20),
     };
 
-    LedController(lib::Clock& clock, lib::Twi& twi);
+    LedController(lib::Twi& twi);
     ~LedController();
-
-    lib::Clock& clock()
-    {
-        return m_clock;
-    }
 
     void set_all(led_states_t states);
     void set(led_states_t mask, led_states_t states);
@@ -56,12 +51,60 @@ public:
     void toggle(led_states_t leds);
 
 private:
-    lib::Clock&  m_clock;
     lib::Twi&    m_twi;
     led_states_t m_states;
 
     void write_lsx_registers(uint8_t address, const uint8_t* ls);
     void update();
+};
+
+class Led
+{
+public:
+    enum pattern_t {
+        OFF,
+        SOLID,
+        FLASH_FAST,
+        FLASH_SLOW,
+    };
+
+    Led(LedController& controller, LedController::led_t led);
+
+    void set_pattern(pattern_t pattern);
+
+private:
+    LedController&             m_controller;
+    lib::Metronome             m_metronome;
+    const LedController::led_t m_led;
+    pattern_t                  m_pattern;
+    int                        m_step;
+
+    void update_led();
+    void on_tick();
+};
+
+class TopDotLed : public Led
+{
+public:
+    TopDotLed(LedController& controller);
+};
+
+class BottomDotLed : public Led
+{
+public:
+    BottomDotLed(LedController& controller);
+};
+
+class UsbGreenLed : public Led
+{
+public:
+    UsbGreenLed(LedController& controller);
+};
+
+class UsbYellowLed : public Led
+{
+public:
+    UsbYellowLed(LedController& controller);
 };
 
 class BatteryGauge

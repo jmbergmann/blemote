@@ -5,17 +5,7 @@
 
 namespace lib {
 
-Clock::Clock()
-{
-    ret_code_t err_code = app_timer_init();
-    APP_ERROR_CHECK(err_code);
-}
-
-Clock::~Clock()
-{
-}
-
-Timer::Timer(Clock& clock, bool periodic, callback_fn fn, void* context)
+Timer::Timer(bool periodic, callback_fn fn, void* context)
 : m_timer{{0}}
 , m_id{&m_timer}
 , m_context(context)
@@ -45,9 +35,9 @@ void Timer::stop()
     APP_ERROR_CHECK(res);
 }
 
-FixedIntervalTimer::FixedIntervalTimer(Clock& clock, bool periodic, duration_type interval,
+FixedIntervalTimer::FixedIntervalTimer(bool periodic, duration_type interval,
     callback_fn fn, void* context)
-: m_timer(clock, periodic, fn, context)
+: m_timer(periodic, fn, context)
 , m_interval(interval)
 {
 }

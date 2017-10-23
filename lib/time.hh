@@ -19,7 +19,7 @@ public:
 
     template <typename OtherPeriod>
     constexpr Duration(Duration<OtherPeriod> other)
-    : m_count{other.count() * ((OtherPeriod::num * period::den) / (OtherPeriod::den * period::num))}
+    : m_count((uint64_t)other.count() * OtherPeriod::num * period::den / ((uint64_t)OtherPeriod::den * period::num))
     {
     }
 
@@ -60,20 +60,13 @@ constexpr Seconds operator"" _s(unsigned long long count)
 
 } // namespace literals
 
-class Clock final
-{
-public:
-    Clock();
-    ~Clock();
-};
-
 class Timer final
 {
 public:
     typedef Duration<Ratio<1, 32768 / (1 + APP_TIMER_CONFIG_RTC_FREQUENCY)>> duration_type;
     typedef void (*callback_fn)(void* context);
 
-    Timer(Clock& clock, bool periodic, callback_fn fn, void* context = nullptr);
+    Timer(bool periodic, callback_fn fn, void* context = nullptr);
     ~Timer();
 
     void start(duration_type interval);
@@ -91,7 +84,7 @@ public:
     typedef Timer::duration_type duration_type;
     typedef Timer::callback_fn   callback_fn;
 
-    FixedIntervalTimer(Clock& clock, bool periodic, duration_type interval, callback_fn fn,
+    FixedIntervalTimer(bool periodic, duration_type interval, callback_fn fn,
         void* context = nullptr);
 
     void start();
@@ -105,8 +98,8 @@ private:
 class DeadlineTimer final : public FixedIntervalTimer
 {
 public:
-    DeadlineTimer(Clock& clock, duration_type interval, callback_fn fn, void* context = nullptr)
-    : FixedIntervalTimer(clock, false, interval, fn, context)
+    DeadlineTimer(duration_type interval, callback_fn fn, void* context = nullptr)
+    : FixedIntervalTimer(false, interval, fn, context)
     {
     }
 };
@@ -114,8 +107,8 @@ public:
 class Metronome final : public FixedIntervalTimer
 {
 public:
-    Metronome(Clock& clock, duration_type interval, callback_fn fn, void* context = nullptr)
-    : FixedIntervalTimer(clock, true, interval, fn, context)
+    Metronome(duration_type interval, callback_fn fn, void* context = nullptr)
+    : FixedIntervalTimer(true, interval, fn, context)
     {
     }
 };

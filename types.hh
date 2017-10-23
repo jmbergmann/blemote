@@ -1,0 +1,12 @@
+#pragma once
+
+
+enum system_state_t {
+    SYS_INITIALISING,
+    SYS_SLEEPING,
+    SYS_CHARGING,
+    SYS_CHARGING_COMPLETE,
+    SYS_CHARGING_FAULT,
+    SYS_ADVERTISING,
+    SYS_DRIVING,
+};

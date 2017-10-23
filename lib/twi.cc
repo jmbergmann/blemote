@@ -26,7 +26,7 @@ Twi::Twi()
         .sda                = PIN_SDA,
         .frequency          = TWI_FREQUENCY,
         .interrupt_priority = APP_IRQ_PRIORITY_HIGH,
-        .clear_bus_init     = false
+        .clear_bus_init     = true
      };
 
      auto err = nrf_drv_twi_init(&g_twiInst, &cfg, NULL, NULL);
